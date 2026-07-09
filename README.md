@@ -36,11 +36,8 @@ Create a wireframe that shows the planned layout of your GUI.
 Your wireframe should show:
 
 * Windows, screens, or major sections of the application
-* Buttons
-* Labels
-* Text fields
-* Images, tables, lists, or other controls
-* Where the user will interact with the application
+* Layouts and controls
+* Clearly labeled JavaFX components (AnchorPane, VBox, Label, Button, TextField, etc.)
 
 You may create your wireframe using any reasonable tool, including:
 
@@ -63,7 +60,7 @@ Example:
 
 ### GUI Wireframe
 
-*Add your wireframe image here.*
+* Replace the example below with your wireframe image.*
 
 ![Wireframe image goes here](wireframe.png)
 
