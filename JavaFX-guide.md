@@ -4,9 +4,7 @@ The following excerpt from [jenkov.com JavaFX Tutorial](https://jenkov.com/tutor
 ## Overview
 In general, a JavaFX application contains one or more stages which corresponds to windows. Each stage has a scene attached to it. Each scene can have an object graph of controls, layouts etc. attached to it, called the scene graph. These concepts are all explained in more detail later. Here is an illustration of the general structure of a JavaFX application:
 
-![Illustration of the tree-like structure of a JavaFX Application](https://jenkov.com/images/java-javafx/javafx-overview-1.png)
-
-![JavaFX rendering](https://www.therevisionist.org/wp-content/uploads/2016/07/MyJavaFX-SimpleButtonGUI_LayoutExplained.png)
+![Illustration of the tree-like structure of a JavaFX Application](javafx.png)
 
 ## Stage
 The _stage_ is the outer frame for a JavaFX application. The stage corresponds to a window.
