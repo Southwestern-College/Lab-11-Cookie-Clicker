@@ -1,292 +1,187 @@
-# Final Project: JavaFX GUI Application
 
-In this final project, you will design and build a GUI application using **Java**, **JavaFX**, **SceneBuilder**, **IntelliJ IDEA**, and **GitHub**.
+![cookie clicker](https://img.icons8.com/emoji/96/000000/cookie-emoji.png)
 
-Your project must include:
+# Lab 11: Cookie Clicker - JavaFX & MVC Pattern
 
-1. A clear project idea
-2. A GUI wireframe
-3. A JavaFX application built with SceneBuilder
-4. At least one model class designed with UML
-5. Java code that implements and tests your model class
-6. A completed final application
-7. An updated README with final screenshots, wireframes, and UML diagrams
+Welcome to Cookie Clicker! In this lab, you'll build a simplified version of the popular incremental game while learning fundamental GUI concepts and the Model-View-Controller (MVC) design pattern using JavaFX.
+
+## Learning Objectives
+
+By the end of this lab, you will:
+- Understand how Controllers interact with Views in JavaFX
+- Learn to link FXML components using `fx:id`
+- Implement the Model-View-Controller (MVC) pattern
+- Practice Object-Oriented Programming concepts: Abstraction, Inheritance, and Polymorphism
 
 ---
 
-## Project Overview
+## Part 1: Basic Cookie Clicker (View ↔ Controller Interaction)
 
-Write a brief description of your project here.
+In Part 1, you'll create a simple clicker where clicking a button increments a cookie counter.
 
-Your description should explain:
+### Part 1A: Click Counter
 
-* What your application does
-* Who the application is for
-* What problem it solves or what task it helps with
-* What the user will be able to do in the GUI
+**Goal**: Understand how the Controller handles events and updates the View.
 
-# Phase 1: Design the GUI
+#### To-Dos:
+1. **Modify `CookieClickerController.java`**:
+    - Add an instance variable `cookieCount` to track the number of cookies
+    - In the `handleClick()` method:
+        - Increment `cookieCount` each time the button is clicked
+        - Update the `cookieLabel` to display the current count
+        - Format: `"Cookies: X"` (where X is the count)
 
-Before writing the full application, you will design the visual layout of your project.
+**Expected Behavior**:
+- When you click the "Click Me!" button, the label should update: `Cookies: 1`, `Cookies: 2`, etc.
 
-## 1. Create a Wireframe
+---
 
-Create a wireframe that shows the planned layout of your GUI.
+### Part 1B: Image Button with fx:id
 
-Your wireframe should show:
+**Goal**: Learn how `fx:id` links FXML components to Controller variables.
 
-* Windows, screens, or major sections of the application
-* Layouts and controls
-* Clearly labeled JavaFX components (AnchorPane, VBox, Label, Button, TextField, etc.)
+#### To-Dos:
+1. **Download a cookie image**:
+    - Find a cookie image online (PNG recommended, ~100-200px)
+    - Save it in `src/main/resources/math130/gui/images/`
+    - Name it `cookie.png`
 
-You may create your wireframe using any reasonable tool, including:
+2. **Modify `cookie-clicker-view.fxml`**:
+    - Replace the `<Button>` with an `<ImageView>` wrapped in a `<Button>`
+    - Give the button an `fx:id="cookieButton"`
+    - Set the `onAction` to call the controller method
 
-* Paper and pencil
-* diagrams.net / Draw.io
-* Canva
-* Google Slides
-* Figma
-* Any other wireframing tool
+3. **Update `CookieClickerController.java`**:
+    - Add `@FXML private Button cookieButton;` to link the FXML button
+    - No other changes needed—it should work the same way!
 
-## 2. Add Your Wireframe to This README
+**Expected Behavior**:
+- Clicking the cookie image increments the counter
 
-Save your wireframe image in your project folder and embed it below using Markdown.
-
-Example:
-
-```markdown
-![Wireframe of main window](wireframe.png)
+**Hint**: Your button in FXML should look something like:
+```xml
+<Button fx:id="cookieButton" onAction="#handleClick">
+    <graphic>
+        <ImageView fitWidth="150" fitHeight="150">
+            <Image url="@images/cookie.png"/>
+        </ImageView>
+    </graphic>
+</Button>
 ```
 
-### GUI Wireframe
+---
 
-* Replace the example below with your wireframe image.*
+## Part 2: Full MVC + Object-Oriented Design
 
-![Wireframe image goes here](wireframe.png)
+In Part 2, you'll implement a complete Cookie Clicker game using the MVC pattern and demonstrate key OOP concepts.
 
-## 3. Build the GUI in SceneBuilder
+### Part 2A: Create the Model
 
-After creating your wireframe, build your GUI using **SceneBuilder**.
+**Goal**: Implement the Model in the MVC pattern by creating an `Upgrade` class.
 
-At this stage, your GUI does not need to be fully functional. The goal is to create the visual structure of your application.
+#### To-Dos:
+1. **Create `Upgrade.java` class** in the same package:
+   ```java
+   public class Upgrade {
+       private String name;
+       private int cost;
+       private int cookiesPerSecond;
+       private int quantityOwned;
+       
+       // Constructor, getters, setters, and methods go here
+   }
+   ```
+
+2. **Add methods**:
+    - `purchase()`: Increases `quantityOwned` by 1
+    - `getCurrentCost()`: Returns the cost for the next purchase
+    - `getTotalProduction()`: Returns `cookiesPerSecond * quantityOwned`
+
+3. **Update Controller**:
+    - Add an `Upgrade` object (e.g., `Upgrade cursor = new Upgrade("Cursor", 15, 1, 0)`)
+    - Add a button in FXML to purchase the upgrade
+    - When purchased: deduct cookies, call `upgrade.purchase()`, update display
+
+**Expected Behavior**:
+- Display upgrade info: "Cursor - Cost: 15"
+- When clicked (if you have enough cookies):
+    - Deduct 15 cookies
+    - Increase quantity owned
+    - Show "Cursor (1 owned)"
 
 ---
 
-# Phase 2: Design and Build a Model Class
+### Part 2B: Automatic Cookie Generation
 
-In this phase, you will design and implement at least one **model class** for your project.
+**Goal**: Implement passive cookie generation using a Timeline (JavaFX timer).
 
-A model class represents the data or logic used by your application.
+#### To-Dos:
+1. **Add Timeline to Controller**:
+   ```java
+   private Timeline timeline;
+   ```
 
-Your model class **cannot** be:
+2. **In `initialize()` method**:
+    - Create a Timeline that runs every second
+    - Calculate total cookies per second from all upgrades
+    - Add that amount to `cookieCount`
 
-* Your application class
-* Your JavaFX controller class
-* A class that only exists to launch the GUI
+3. **Display cookies per second**:
+    - Add a label showing "Cookies per second: X"
 
-Good model classes usually represent an important object in your project.
-
-Examples:
-
-* `Student`
-* `User`
-* `Recipe`
-* `Book`
-* `GameCharacter`
-* `GamePiece`
-* `PlayingCard`
-* `Pokemon`
-* `Trainer`
-
-## 1. Create a UML Class Diagram
-
-Create a UML class diagram for at least one model class in your project.
-
-Your UML diagram should include:
-
-* Class name
-* Fields / instance variables
-* Constructors
-* Methods
-* Visibility symbols such as `+` and `-`
-
-You may use Mermaid, PlantUML, diagrams.net, Lucidchart, Visual Paradigm, or another UML tool.
-
-## UML Class Diagram
-
-*Add your UML class diagram here.*
-
-You may use [Mermaid](https://mermaid.ai/open-source/syntax/classDiagram.html)  directly in this README.
-
-Here is is an example of the `Card` class that we created in a previous lab.
-```
-classDiagram
-    class Card {
-        -int value
-        -char suit
-
-        +char HEART
-        +char DIAMOND
-        +char CLUB
-        +char SPADE
-
-        +int DEFAULT_VALUE
-        +char DEFAULT_SUIT
-
-        +Card()
-        +Card(int value, char suit)
-        +Card(Card original)
-
-        +boolean setValue(int value)
-        +boolean setSuit(char suit)
-        +boolean setAll(int value, char suit)
-
-        +char getSuit()
-        +int getValue()
-
-        +String getPrintValue()
-        +String getPrintCard()
-
-        +String toString()
-        +boolean equals(Card otherCard)
-    }
-```
-The code above renders the following UML class diagram.
-```mermaid
-classDiagram
-    class Card {
-        -int value
-        -char suit
-
-        +char HEART
-        +char DIAMOND
-        +char CLUB
-        +char SPADE
-
-        +int DEFAULT_VALUE
-        +char DEFAULT_SUIT
-
-        +Card()
-        +Card(int value, char suit)
-        +Card(Card original)
-
-        +boolean setValue(int value)
-        +boolean setSuit(char suit)
-        +boolean setAll(int value, char suit)
-
-        +char getSuit()
-        +int getValue()
-
-        +String getPrintValue()
-        +String getPrintCard()
-
-        +String toString()
-        +boolean equals(Card otherCard)
-    }
-```
-
-## 2. Implement Your Model Class
-
-Create your model class in the appropriate source folder of your project.
-
-Your class should include:
-
-* Private instance variables
-* At least one constructor
-* Getter and setter methods as appropriate
-* At least one method that performs a meaningful action or calculation
-* A `toString()` method
-
-Your class should be related to your final project.
-
-## 3. Create a Tester Class
-
-Create a separate tester class with a `main` method.
-
-Use the tester class to:
-
-* Create objects of your model class
-* Call each constructor
-* Test each method
-* Print results to the console
-* Confirm that your class works before connecting it to the GUI
-
-Your tester class is separate from your JavaFX application.
+**Expected Behavior**:
+- After purchasing a Cursor, cookies automatically increment every second
 
 ---
 
-# Phase 3: Complete the Application
+### Part 2C: Abstraction & Inheritance
 
-In this phase, you will finish building your JavaFX project and update this README file.
+**Goal**: Demonstrate OOP principles with multiple upgrade types.
 
-You will present your project to the class during our last class meeting.
-## Final Application Requirements
+#### To-Dos:
+1. **Refactor `Upgrade` to abstract class**:
+    - Make `getCurrentCost()` abstract
+    - Different upgrades can have different cost scaling formulas
 
-Your completed project should include:
+2. **Create concrete subclasses**:
+    - `Cursor extends Upgrade`: Linear cost (base cost + 1.1*quantity)
+    - `Grandma extends Upgrade`: Exponential cost (base cost * 1.25^quantity)
+    - `Farm extends Upgrade`: Different cost formula
 
-* A working JavaFX GUI
-* At least one model class used meaningfully
-* Updated project documentation in this README
+3. **Use Polymorphism**:
+    - Store all upgrades in `ArrayList<Upgrade> upgrades`
+    - Loop through them to calculate total production
+    - Display all upgrades dynamically
 
-Your application should allow the user to interact with the program in a meaningful way.
-
-Examples of meaningful interaction include:
-
-* Entering information
-* Clicking buttons
-* Viewing calculated results
-* Adding, editing, or removing data
-* Displaying messages or feedback
-* Updating the interface based on user input
-
----
-
-# Final README Updates
-
-Before submitting your final project, update this README so that it accurately represents your completed application.
-
-Your final README should include:
-
-* A complete project description
-* Final wireframe image or updated GUI design
-* UML class diagram for your model class
-* Screenshots of your completed application
-* A short explanation of how the user interacts with your application
-* Any known issues or unfinished features
-
-## Final Application Screenshots
-
-*Add screenshots of your completed application here.*
-
-![Final application screenshot](gui.png)
-
-## How to Use the Application
-
-Explain how someone should use your application.
-
-*Write instructions here.*
-
-## Known Issues
-
-List any bugs, missing features, or limitations.
-
-*Write known issues here, or write “None” if there are no known issues.*
+**Expected Behavior**:
+- Multiple upgrade types with different costs and production rates
+- Each upgrade's cost increases differently when purchased
 
 ---
 
-# Submission Checklist
+## Tips
 
-Before submitting, make sure your project includes:
+- **Part 1**: Focus on understanding how changing variables in the Controller updates the View
+- **Part 2**: Think about separation of concerns—the Model (`Upgrade`) shouldn't know about JavaFX
+- Use `String.format()` for clean number formatting: `String.format("Cookies: %,d", cookieCount)`
+- Test frequently! Run after each small change
 
-* [ ] Project description
-* [ ] GUI wireframe
-* [ ] JavaFX GUI built with SceneBuilder
-* [ ] UML class diagram
-* [ ] Model class
-* [ ] Tester class with a `main` method
-* [ ] Main JavaFX application class
-* [ ] Controller class
-* [ ] Working user interaction
-* [ ] Final screenshots
-* [ ] Updated README
-* [ ] Project pushed to GitHub
+## Resources
+
+- [JavaFX Documentation](https://openjfx.io/javadoc/21/)
+- [JavaFX Button](https://openjfx.io/javadoc/21/javafx.controls/javafx/scene/control/Button.html)
+- [JavaFX ImageView](https://openjfx.io/javadoc/21/javafx.graphics/javafx/scene/image/ImageView.html)
+- [JavaFX Timeline](https://openjfx.io/javadoc/21/javafx.graphics/javafx/animation/Timeline.html)
+- Original Cookie Clicker: [orteil.dashnet.org/cookieclicker](https://orteil.dashnet.org/cookieclicker/)
+
+## Bonus Challenges
+
+- Add more upgrade types (Mine, Factory, Bank)
+- Implement upgrade tooltips showing production rates
+- Add sound effects when clicking
+- Save/load game progress to a file
+- Add achievements
+
+---
+
+Good luck, and happy clicking! 🍪
