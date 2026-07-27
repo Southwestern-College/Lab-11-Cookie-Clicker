@@ -1,14 +1,8 @@
 package math130.gui;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-
+/**
+ * The intentionally minimal controller for Part 1A.
+ * Follow the README to add event handling and view injection one step at a time.
+ */
 public class CookieClickerController {
-    @FXML
-    private Label cookieLabel;
-
-    @FXML
-    protected void handleClick() {
-        cookieLabel.setText("Cookies: X");
-    }
 }
